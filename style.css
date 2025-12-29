@@ -56,14 +56,18 @@ footer{
 #params{
     display: none;
     background-color: #e8e8e8;
-    padding: 10px;
+    padding: 10px 15px;
     border:1.5px solid #4CAF50;
     font-family:Arial, Helvetica, sans-serif;
     line-height: 1.6;
     margin-top: 10px;
     text-align: center;
     width: 380px;
+    position: fixed;
+    top: 20%;
+    left: 40%;
     z-index: 1000;
+
 }
 
 #params .radioinput{
