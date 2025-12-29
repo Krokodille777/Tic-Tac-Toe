@@ -1,0 +1,116 @@
+#main-header{
+    background-color: #e8e8e8;
+    color: rgb(63, 156, 30);
+    text-align: center;
+    padding: 10px 0;
+    font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    font-size: 24px;
+}
+
+#main-header h1{
+    margin: 0;
+    font-weight: normal;
+}
+hr{
+    border-color: #4CAF50;
+    display: block;
+}
+
+
+main{
+    padding: 20px;
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+}
+
+main button{
+    background-color: rgb(63, 156, 30);
+    color: white;
+    border: none;
+    padding: 15px 25px;
+    cursor: pointer;
+    font-size: 22px;
+    border-radius: 5px;
+    position: relative;
+    top: 350px;
+}
+
+.main button:hover{
+    background-color: #45a049;
+}
+
+footer{
+    background-color: #e8e8e8;
+    color: rgb(63, 156, 30);
+    text-align: center;
+    padding: 10px 0;
+    font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    position: fixed;
+    width: 100%;
+    bottom: 0;
+}
+.params{
+    display: none;
+    background-color: #e8e8e8;
+    padding: 10px;
+    border:1.5px solid #4CAF50;
+    font-family:Arial, Helvetica, sans-serif;
+    line-height: 1.6;
+    margin-top: 10px;
+    text-align: center;
+    width: 380px;
+    z-index: 1000;
+}
+
+.params .radioinput{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    margin-bottom: 8px;
+
+}
+.params .radioinput input{
+    margin-right: 8px;
+}
+
+.params label{
+    font-size: 16px;
+}
+.params input[type="number"]{
+    width: 80px;
+    padding: 5px;
+    margin-left: 10px;
+    border: 1.5px solid #4CAF50;
+    border-radius: 4px;
+}
+
+.params button{
+    background-color: rgb(63, 156, 30);
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    cursor: pointer;
+    font-size: 14px;
+    border-radius: 5px;
+    margin-top: 10px;
+}
+
+
+.params button:hover{
+    background-color: #45a049;
+}
+
+.gameBoard{
+    margin-top: 20px;
+    display: none;
+    gap: 2px;
+    background-color: #4CAF50;
+    border: 2px solid #4CAF50;
+    padding: 2px;
+    z-index: 1000;
+}
