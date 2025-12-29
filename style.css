@@ -53,7 +53,7 @@ footer{
     width: 100%;
     bottom: 0;
 }
-.params{
+#params{
     display: none;
     background-color: #e8e8e8;
     padding: 10px;
@@ -66,7 +66,7 @@ footer{
     z-index: 1000;
 }
 
-.params .radioinput{
+#params .radioinput{
     display: flex;
     align-items: center;
     flex-direction: column;
@@ -74,14 +74,14 @@ footer{
     margin-bottom: 8px;
 
 }
-.params .radioinput input{
+#params .radioinput input{
     margin-right: 8px;
 }
 
-.params label{
+#params label{
     font-size: 16px;
 }
-.params input[type="number"]{
+#params input[type="number"]{
     width: 80px;
     padding: 5px;
     margin-left: 10px;
@@ -89,7 +89,7 @@ footer{
     border-radius: 4px;
 }
 
-.params button{
+#params button{
     background-color: rgb(63, 156, 30);
     color: white;
     border: none;
@@ -101,11 +101,11 @@ footer{
 }
 
 
-.params button:hover{
+#params button:hover{
     background-color: #45a049;
 }
 
-.gameBoard{
+#gameBoard{
     margin-top: 20px;
     display: none;
     gap: 2px;
