@@ -1,7 +1,5 @@
-let setParamsModal = document.getElementById("params");
 let gameBoardModal = document.getElementById("gameBoard");
 let startBtn = document.getElementById("start-button");
-let setParamsBtn = document.getElementById("set-params");
 let closeBoardBtn = document.getElementById("close-board");
 
 
@@ -26,16 +24,7 @@ startBtn.onclick = function(){
     gameBoardModal.style.display = "none";
 }
 
-function collectParamsData(){
-    let usernameinput = document.getElementById("player1").value;
 
-    const playerData = {
-        username: usernameinput,
-    };
-    
-    localStorage.setItem("playerData", JSON.stringify(playerData));
-    return playerData;
-}
 
 function drawGameBoard(){
     let gameBoardCanvas = document.getElementById("ticTacToeCanvas");
@@ -186,9 +175,10 @@ function checkResult() {
 
     if (roundWon) {
         gameActive = false;
-     
+        let username = JSON.parse(localStorage.getItem("playerData")).username;
+        let botname = "Bot";
         setTimeout(() => {
-            alert(winner === "X" ? "Победили Крестики!" : "Победили Нолики!");
+            alert(winner === "X" ? "Cross wins!" : "Nought wins!");
             swapSides();
             resetGame();
         }, 100);
@@ -198,7 +188,7 @@ function checkResult() {
     if (!cells.includes(null)) {
         gameActive = false;
         setTimeout(() => {
-            alert("Ничья!");
+            alert("Draw!");
             swapSides();
             resetGame();
         }, 100);
