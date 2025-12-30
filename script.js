@@ -56,10 +56,7 @@ function closeGameBoard(){
 closeBoardBtn.onclick = function(){
     closeGameBoard();
 }
-
-setParamsBtn.onclick = function(){
-    collectParamsData();
-    setParamsModal.style.display = "none";
+startBtn.onclick = function(){
     startBtn.style.display = "none";
     
     gameBoardModal.style.display = "flex";
@@ -175,8 +172,6 @@ function checkResult() {
 
     if (roundWon) {
         gameActive = false;
-        let username = JSON.parse(localStorage.getItem("playerData")).username;
-        let botname = "Bot";
         setTimeout(() => {
             alert(winner === "X" ? "Cross wins!" : "Nought wins!");
             swapSides();
