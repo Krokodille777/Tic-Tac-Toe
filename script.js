@@ -5,6 +5,19 @@ let setParamsBtn = document.getElementById("set-params");
 let closeBoardBtn = document.getElementById("close-board");
 
 
+ 
+let currentTurn = "X";
+let playerSide = "X";
+let botSide = "O";
+let gameActive = false;
+let cells = new Array(9).fill(null);
+
+const winningConditions = [
+    [0, 1, 2], [3, 4, 5], [6, 7, 8],
+    [0, 3, 6], [1, 4, 7], [2, 5, 8],
+    [0, 4, 8], [2, 4, 6]
+];
+
 startBtn.onclick = function(){
     setParamsModal.style.display = "flex";
     setParamsModal.style.flexDirection = "column";
@@ -15,32 +28,21 @@ startBtn.onclick = function(){
 
 function collectParamsData(){
     let usernameinput = document.getElementById("player1").value;
-    let crossinput = document.getElementById("Cross").value;
-    let noughtinput = document.getElementById("Nought").value;
 
-    if (usernameinput == "" || crossinput == "" || noughtinput == ""){
-        alert("Please fill in all fields.");
-    }
-    else{
-        const playerData = {
-            username: usernameinput,
-            cross: crossinput,
-            nought: noughtinput
-        }
-        console.log(playerData);
-        localStorage.setItem("playerData", JSON.stringify(playerData));
-        return playerData;
-    }
+    const playerData = {
+        username: usernameinput,
+    };
+    
+    localStorage.setItem("playerData", JSON.stringify(playerData));
+    return playerData;
 }
-
-
-
-
 
 function drawGameBoard(){
     let gameBoardCanvas = document.getElementById("ticTacToeCanvas");
     let context = gameBoardCanvas.getContext("2d");
-    context.clearRect(0,0 , gameBoardCanvas.width, gameBoardCanvas.height);
+   
+    context.clearRect(0, 0, gameBoardCanvas.width, gameBoardCanvas.height);
+    
     context.beginPath();
     context.moveTo(100, 0);
     context.lineTo(100, 300);
@@ -56,10 +58,10 @@ function drawGameBoard(){
     context.stroke();
 }
 
-
 function closeGameBoard(){
     gameBoardModal.style.display = "none";
     startBtn.style.display = "block";
+    gameActive = false; 
 }
 
 closeBoardBtn.onclick = function(){
@@ -70,11 +72,13 @@ setParamsBtn.onclick = function(){
     collectParamsData();
     setParamsModal.style.display = "none";
     startBtn.style.display = "none";
+    
     gameBoardModal.style.display = "flex";
     gameBoardModal.style.flexDirection = "column";
     gameBoardModal.style.alignItems = "center";
     gameBoardModal.style.justifyContent = "center";
-    drawGameBoard();
+    
+    resetGame(); 
 }
 
 function drawACross(x, y){
@@ -90,7 +94,6 @@ function drawACross(x, y){
     context.stroke();
 }
 
-
 function drawANought(x, y){
     let gameBoardCanvas = document.getElementById("ticTacToeCanvas");
     let context = gameBoardCanvas.getContext("2d");
@@ -101,55 +104,35 @@ function drawANought(x, y){
     context.stroke();
 }
 
-
-let playerData = JSON.parse(localStorage.getItem("playerData"));
-let currentPlayer = playerData && playerData.cross === "X" ? "cross" : "nought";
-let gameActive = true; 
-let cells = new Array(9).fill(null);
-
-
-const winningConditions = [
-    [0, 1, 2], [3, 4, 5], [6, 7, 8], 
-    [0, 3, 6], [1, 4, 7], [2, 5, 8], 
-    [0, 4, 8], [2, 4, 6]             
-];
-
-
 document.getElementById("ticTacToeCanvas").addEventListener("click", function(event){
-    if (!gameActive || currentPlayer !== "cross") return; // Если игра окончена или ход бота - не реагируем
+    if (!gameActive || currentTurn !== playerSide) return;
 
     let rect = event.target.getBoundingClientRect();
     let x = event.clientX - rect.left;
     let y = event.clientY - rect.top;
 
-    
     let col = Math.floor(x / 100); 
     let row = Math.floor(y / 100);
-
-   
     let cellIndex = row * 3 + col;
 
+    if (cells[cellIndex] !== null) return;
 
-    if (cells[cellIndex] !== null) {
-        return; 
-    }
-
-   
     let drawX = col * 100;
     let drawY = row * 100;
 
-    // Рисуем и записываем ход
-    drawACross(drawX, drawY);
-    cells[cellIndex] = "X";
+    if (playerSide === "X") {
+        drawACross(drawX, drawY);
+    } else {
+        drawANought(drawX, drawY);
+    }
     
-    // Проверяем победу
+    cells[cellIndex] = playerSide;
+    
     checkResult();
     
-    // Передаем ход боту
-    currentPlayer = "nought";
+    currentTurn = botSide;
 });
 
-// Ход противника (Бота)
 function opponentMove(){
     if (!gameActive) return;
 
@@ -160,27 +143,28 @@ function opponentMove(){
         }
     }
 
-    if (emptyCells.length === 0){
-        return; // Больше нет места
-    }
+    if (emptyCells.length === 0) return;
 
     let randomIndex = Math.floor(Math.random() * emptyCells.length);
     let cellIndex = emptyCells[randomIndex];
     
-   
     let col = cellIndex % 3;
     let row = Math.floor(cellIndex / 3);
     
     let drawX = col * 100; 
     let drawY = row * 100;
     
-    drawANought(drawX, drawY);
-    cells[cellIndex] = "O";
+    if (botSide === "X") {
+        drawACross(drawX, drawY);
+    } else {
+        drawANought(drawX, drawY);
+    }
+    
+    cells[cellIndex] = botSide;
     
     checkResult();
-    currentPlayer = "cross";
+    currentTurn = playerSide; 
 }
-
 
 function checkResult() {
     let roundWon = false;
@@ -192,9 +176,7 @@ function checkResult() {
         let b = cells[winCondition[1]];
         let c = cells[winCondition[2]];
 
-        if (a === null || b === null || c === null) {
-            continue;
-        }
+        if (a === null || b === null || c === null) continue;
         if (a === b && b === c) {
             roundWon = true;
             winner = a;
@@ -203,21 +185,52 @@ function checkResult() {
     }
 
     if (roundWon) {
-        gameActive = false; 
-        setTimeout(() => alert(winner === "X" ? "Победили Крестики!" : "Победили Нолики!"), 100);
+        gameActive = false;
+     
+        setTimeout(() => {
+            alert(winner === "X" ? "Победили Крестики!" : "Победили Нолики!");
+            swapSides();
+            resetGame();
+        }, 100);
         return;
     }
 
-   
     if (!cells.includes(null)) {
         gameActive = false;
-        setTimeout(() => alert("Ничья!"), 100);
+        setTimeout(() => {
+            alert("Ничья!");
+            swapSides();
+            resetGame();
+        }, 100);
+        return;
     }
 }
 
-// Таймер для запуска бота
+function swapSides(){
+    if (playerSide === "X"){
+        playerSide = "O";
+        botSide = "X";
+        alert("You are now Noughts (O)");
+    }
+    else{
+        playerSide = "X";
+        botSide = "O";
+        alert("You are now Crosses (X)");
+    }
+}
+
+function resetGame(){
+    cells.fill(null);        
+    gameActive = true;       
+    currentTurn = "X";       
+    
+    drawGameBoard();        
+}
+
+
 setInterval(function(){
-    if (currentPlayer === "nought" && gameActive){
+   
+    if (gameActive && currentTurn === botSide){
         opponentMove();
     }
 }, 1000);
